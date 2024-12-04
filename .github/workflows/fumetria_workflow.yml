@@ -15,7 +15,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Run linter
-        run: npm lint
+        run: npm run lint
 
   cypress_job:
     needs: linter_job
