@@ -1,0 +1,38 @@
+name: fumetria_workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  linter_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run linter
+        run: npm lint
+
+  cypress_job:
+    needs: linter_job
+    runs-on: ubuntu-latest
+
+    steps:
+      #step 1
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      #step 2
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        id: cypress
+        continue-on-error: true
+      - name: Save test result
+        run: echo "${{ steps.cypress.outcome }}" > result.txt
+
+      #step 3
+      - name: Create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: result.txt
+          path: .
