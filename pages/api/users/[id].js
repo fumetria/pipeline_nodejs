@@ -4,9 +4,11 @@ export default handler;
 
 function handler(req, res) {
   switch (req.method) {
-    case 'GET':
+    //7:10  Error: Strings must use doublequote.  quotes
+    case "GET":
       return getUserById();
-    case 'PUT':
+    //9:10  Error: Strings must use doublequote.  quotes
+    case "PUT":
       return updateUser();
     case "DELETE":
       return deleteUser();
@@ -15,7 +17,8 @@ function handler(req, res) {
   }
 
   function getUserById() {
-    var user = usersRepo.getById(req.query.id);
+    // 18:5  Error: Unexpected var, use let or const instead.  no-var
+    let user = usersRepo.getById(req.query.id);
     return res.status(200).json(user);
   }
 

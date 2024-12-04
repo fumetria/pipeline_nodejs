@@ -4,15 +4,18 @@ export default handler;
 
 function handler(req, res) {
   switch (req.method) {
-    case 'GET':
+    //7:10  Error: Strings must use doublequote.  quotes
+    case "GET":
       return getUsers();
-    case 'POST0':
+    //9:10  Error: Strings must use doublequote.  quotes
+    case "POST":
       return createUser();
-    default:
-        return res.status(405).end(`Method ${req.method} Not Allowed`);
-    case 'DELETE':
+    //13:10  Error: Strings must use doublequote.  quotes
+    case "DELETE":
       return deleteAllUsers();
-
+    //11:5  Error: Default clause should be the last clause.  default-case-last
+    default:
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
   function getUsers() {
