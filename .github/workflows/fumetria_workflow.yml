@@ -58,14 +58,14 @@ jobs:
 
       #step 3
       - name: Set output
-        run: echo "cypress_outcome=$(cat result.txt)"
+        run: echo "::set-output name=cypress_outcome::$(cat result.txt)"
         id: cypress_outcome
 
       #step 4
       - name: Add badge test result
         uses: ./.github/actions/add_badge_action
         with:
-          test_result: cypress_outcome
+          test_result: ${{steps.cypress_outcome.outputs.cypress_outcome}}
 
       #step 5
       - name: Commit and Push changes
