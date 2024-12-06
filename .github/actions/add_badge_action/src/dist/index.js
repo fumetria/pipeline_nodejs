@@ -5,8 +5,8 @@
 
             __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
                 try {
-                    import * as core from '@actions/core';
-                    import { promises as fs } from 'fs';
+                    const core = require('@actions/core');
+                    const fs = require('fs').promises;
 
                     try {
                         const testResult = core.getInput(test_result);
