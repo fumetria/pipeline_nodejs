@@ -57,8 +57,8 @@ jobs:
           name: result.txt
 
       #step 3
-      - name: Get output
-        run: echo "::set-output name=cypress_outcome::$(cat result.txt)"
+      - name: Set output
+        run: echo "cypress_outcome=$(cat result.txt)"
         id: cypress_outcome
 
       #step 4
