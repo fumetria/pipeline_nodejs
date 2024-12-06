@@ -76,3 +76,19 @@ jobs:
           author_email: "fulin.fujun@outlook.es"
           message: "Update test badge result"
           push: true
+
+  deploy_job:
+    needs: cypress_job
+    runs-on: ubuntu-latest
+
+    steps:
+      #step 1
+      - name: Checkout code
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: "--prod" #Optional
+          vercel-org-id: ${{ secrets.ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+          working-directory: ./sub-directory

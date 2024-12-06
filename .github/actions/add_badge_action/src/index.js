@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const fs = require('fs').promises;
+import * as core from '@actions/core';
+import { promises as fs } from 'fs';
 
 try {
     const testResult = core.getInput(test_result);
