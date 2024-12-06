@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Install npm dependencies
         run: npm install
       - name: Run linter
@@ -40,3 +38,39 @@ jobs:
         with:
           name: result.txt
           path: .
+
+  modify_readme_job:
+    needs: cypress_job
+    runs-on: ubuntu-latest
+
+    steps:
+      #step 1
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      #step 2
+      - name: Get artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: result.txt
+
+      #step 3
+      - name: Get output
+        run: ::set-output name=cypress_outcome::$(cat result.txt)
+        id: cypress_outcome
+
+      #step 4
+      - name: Add badge test result
+        uses: ./.github/actions/add_badge_action
+        with:
+          test_result: cypress_outcome
+
+      #step 5
+      - name: Commit and Push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: .
+          author_name: "Fu Jun Fu Lin"
+          author_email: "fulin.fujun@outlook.es"
+          message: "Update test badge result"
+          push: true

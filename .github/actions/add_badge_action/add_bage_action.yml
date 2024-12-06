@@ -1,0 +1,9 @@
+name: add_badge_action
+description: "Adding a badge on readme.MD for test result"
+inputs:
+  test_result:
+    description: "Test result"
+    required: true
+runs:
+  using: "node12"
+  main: index.js
