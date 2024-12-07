@@ -25,6 +25,9 @@ jobs:
       #step 1
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Run start
+        run: npm start
 
       #step 2
       - name: Cypress run
