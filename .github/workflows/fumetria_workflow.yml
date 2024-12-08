@@ -32,8 +32,12 @@ jobs:
       #step 2
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          wait-on: "http://localhost:3000"
         id: cypress
         continue-on-error: true
+
       - name: Save test result
         run: echo "${{ steps.cypress.outcome }}" > result.txt
 
@@ -97,4 +101,4 @@ jobs:
           vercel-args: "--prod" #Optional
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
-          working-directory: ./sub-directory
+          # working-directory: ../../
