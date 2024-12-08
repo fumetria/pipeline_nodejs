@@ -25,7 +25,7 @@ jobs:
       #step 1
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       # - name: Run start
       #   run: npm start
 
@@ -80,18 +80,21 @@ jobs:
           message: "Update test badge result"
           push: true
 
-  # deploy_job:
-  #   needs: cypress_job
-  #   runs-on: ubuntu-latest
+  deploy_job:
+    needs: cypress_job
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     #step 1
-  #     - name: Checkout code
-  #       uses: amondnet/vercel-action@v20
-  #       with:
-  #         vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-  #         github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-  #         vercel-args: "--prod" #Optional
-  #         vercel-org-id: ${{ secrets.ORG_ID}} #Required
-  #         vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
-  #         working-directory: ./sub-directory
+    steps:
+      #step 1
+      - name: Checkout code
+        uses: actions/checkout@v4
+      #step 2
+      - name: Deploy in Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          # github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: "--prod" #Optional
+          vercel-org-id: ${{ secrets.ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+          working-directory: ./sub-directory
