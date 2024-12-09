@@ -1,0 +1,34 @@
+name: send_email_action
+description: Action for send a notification to the user
+inputs:
+  MAIL_USERNAME:
+    description: "User email"
+    required: true
+  MAIL_PASSWORD:
+    description: "User password"
+    required: true
+  OAUTH_CLIENTID:
+    description: "Client ID"
+    required: true
+  OAUTH_CLIENT_SECRET:
+    description: "Client secret"
+    required: true
+  OAUTH_REFRESH_TOKEN:
+    description: "Client refresh token"
+    required: true
+  linter_job_result:
+    description: "Linter job result"
+    required: true
+  cypress_job_result:
+    description: "cypress job result"
+    required: true
+  add_badge_job_result:
+    description: "add badge job result"
+    required: true
+  deploy_job_result:
+    description: "deploy result"
+    required: true
+
+runs:
+  using: "node12"
+  main: src/index.js
