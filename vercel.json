@@ -3,11 +3,11 @@
   "public": false,
   "github": {
     "enabled": false
-  },
+  }
   
-  "builds": [
-    { "src": "./public", "use": "@vercel/static" }
-  ]
+  // "builds": [
+  //   { "src": "./pages/index.js", "use": "@vercel/static" }
+  // ]
   
   
 }
