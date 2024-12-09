@@ -17,8 +17,8 @@ export default function Home() {
         <Img
           src="/5Bb.gif"
           alt="It's happening"
-          width={50}
-          height={50}
+          width={100}
+          height={100}
         />
 
 
