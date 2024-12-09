@@ -15,7 +15,7 @@ export default function Home() {
           Get started by editing <code>pages/index.js</code>
         </p>
         <Img
-          src="https://giphy.com/explore/ron-paul-its-happening"
+          src="https://giphy.com/embed/5mBE2MiMVFITS"
           alt="It's happening"
           width={50}
           height={50}
