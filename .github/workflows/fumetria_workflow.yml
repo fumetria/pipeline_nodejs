@@ -12,8 +12,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Install npm dependencies
         run: npm install
+
       - name: Run linter
         run: npm run lint
 
@@ -95,7 +97,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
           # github-token: ${{ secrets.GH_TOKEN }} #Optional
-          vercel-args: "--prod" #Optional
+          # vercel-args: "--prod" #Optional
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
           # working-directory: ../../
