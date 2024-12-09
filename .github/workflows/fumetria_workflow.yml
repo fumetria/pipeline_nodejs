@@ -119,6 +119,7 @@ jobs:
       - name: Send email
         uses: ./.github/actions/send_email_action
         with:
+          start: npm start
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           OAUTH_CLIENTID: ${{ secrets.OAUTH_CLIENTID }}

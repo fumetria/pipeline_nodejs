@@ -22,8 +22,8 @@ inputs:
   cypress_job_result:
     description: "cypress job result"
     required: true
-  add_badge_job_result:
-    description: "add badge job result"
+  modify_readme_job_result:
+    description: "modify readme job result"
     required: true
   deploy_job_result:
     description: "deploy result"
