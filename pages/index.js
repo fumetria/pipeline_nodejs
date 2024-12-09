@@ -14,6 +14,7 @@ export default function Home() {
         <p className="description">
           Get started by editing <code>pages/index.js</code>
         </p>
+        <img src="https://giphy.com/explore/ron-paul-its-happening" height="50px" width="50px"></img>
 
         <div className="grid">
           <a href="https://nextjs.org/docs" className="card">
