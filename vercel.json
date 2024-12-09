@@ -5,9 +5,4 @@
     "enabled": false
   }
   
-  // "builds": [
-  //   { "src": "./pages/index.js", "use": "@vercel/static" }
-  // ]
-  
-  
 }
