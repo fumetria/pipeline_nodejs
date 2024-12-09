@@ -15,7 +15,7 @@ export default function Home() {
           Get started by editing <code>pages/index.js</code>
         </p>
         <Img
-          src="https://giphy.com/embed/5mBE2MiMVFITS"
+          src="5Bb.gif"
           alt="It's happening"
           width={50}
           height={50}
