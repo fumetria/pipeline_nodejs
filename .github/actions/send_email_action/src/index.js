@@ -53,6 +53,7 @@ async function main() {
                 console.log("Email sent successfully");
             }
         });
+        process.exit(0);
     } catch (error) {
         core.setFailed(error);
     }
