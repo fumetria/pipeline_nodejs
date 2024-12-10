@@ -105,6 +105,8 @@ jobs:
 
   notificacion_job:
     needs:
+      - linter_job
+      - cypress_job
       - deploy_job
       - modify_readme_job
     runs-on: ubuntu-latest

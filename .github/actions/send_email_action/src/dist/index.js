@@ -63395,8 +63395,10 @@ async function main() {
                 console.log("Error " + err);
             } else {
                 console.log("Email sent successfully");
+                process.exit(0);
             }
         });
+        process.exit(0);
     } catch (error) {
         core.setFailed(error);
     }
