@@ -1,5 +1,5 @@
 name: send_email_action
-description: Action for send a notification to the user
+description: "Action for send a notification to the user"
 inputs:
   MAIL_USERNAME:
     description: "User email"
@@ -28,7 +28,6 @@ inputs:
   deploy_job_result:
     description: "deploy result"
     required: true
-
 runs:
   using: "node12"
   main: src/dist/index.js
