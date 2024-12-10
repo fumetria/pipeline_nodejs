@@ -5,5 +5,5 @@ inputs:
     description: "Test result"
     required: true
 runs:
-  using: "node12"
+  using: "node20"
   main: src/dist/index.js

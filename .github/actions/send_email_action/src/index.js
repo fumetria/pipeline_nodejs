@@ -1,10 +1,12 @@
-require('dotenv').config();
+
 const core = require('@actions/core');
 
 const express = require('express');
 const nodemailer = require('nodemailer');
 const app = express();
 const PORT = 3500;
+
+require('dotenv').config();
 
 async function main() {
 
