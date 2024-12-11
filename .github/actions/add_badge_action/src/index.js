@@ -12,7 +12,7 @@ async function main() {
         // const old_readme = await fs.readFile('./OldREADME.md', 'utf8');
         const textBadge = `RESULTAT DELS ÚLTIMS TESTS \n ![Test result badge](${badge})`;
         await fs.writeFile('./README.md', textBadge);
-        await fs.appendFile('./docs/activitat_gh_actions.md');
+        await fs.appendFile('./README.md', './docs/activitat_gh_actions.md');
         process.exit(0);
     } catch (error) {
         core.setFailed(error);

@@ -51,6 +51,7 @@ jobs:
   modify_readme_job:
     needs: cypress_job
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
       #step 1
@@ -87,6 +88,7 @@ jobs:
   deploy_job:
     needs: cypress_job
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
       #step 1
