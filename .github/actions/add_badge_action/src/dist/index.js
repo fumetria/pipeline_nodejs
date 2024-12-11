@@ -27543,7 +27543,7 @@ const core = __nccwpck_require__(7484);
 const fs = (__nccwpck_require__(9896).promises);
 
 async function main() {
-    
+
     try {
         const testResult = core.getInput('test_result');
         const imgFail = 'https://img.shields.io/badge/test-failure-red';
@@ -27553,6 +27553,7 @@ async function main() {
         // const old_readme = await fs.readFile('./OldREADME.md', 'utf8');
         const textBadge = `RESULTAT DELS ÚLTIMS TESTS \n ![Test result badge](${badge})`;
         await fs.writeFile('./README.md', textBadge);
+        await fs.appendFile('./docs/activitat_gh_actions.md');
         process.exit(0);
     } catch (error) {
         core.setFailed(error);
