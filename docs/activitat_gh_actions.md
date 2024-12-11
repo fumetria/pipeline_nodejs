@@ -21,3 +21,5 @@ La pràctica consistirà en fer diversos jobs dins d'un workflow. Aquestos seran
 - Notification job: Aquest job s'encarregarà de notificar-mos mitjançant un email amb els resultats de tots els job d'aquest GitHub Action.
 
 Per últim, modificarem el nostre perfil amb metriques de GitHub.
+
+Comencem creant el nostre workflow.yml:

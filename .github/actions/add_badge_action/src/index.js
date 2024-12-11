@@ -10,9 +10,10 @@ async function main() {
         const badge = testResult === 'success' ? imgSuccess : imgFail;
         // console.log(badge);
         // const old_readme = await fs.readFile('./OldREADME.md', 'utf8');
-        const textBadge = `RESULTAT DELS ÚLTIMS TESTS \n ![Test result badge](${badge})`;
+        const textBadge = `RESULTAT DELS ÚLTIMS TESTS \n ![Test result badge](${badge}) \n`;
+        const docsText = await fs.readFile('./docs/activitat_gh_actions.md', 'utf8');
         await fs.writeFile('./README.md', textBadge);
-        await fs.appendFile('./README.md', './docs/activitat_gh_actions.md');
+        await fs.appendFile('./README.md', docsText);
         process.exit(0);
     } catch (error) {
         core.setFailed(error);
