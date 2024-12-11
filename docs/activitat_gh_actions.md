@@ -73,14 +73,14 @@ linter_job:
 
 Al arrancar per primera vegada el nostre script de linter, vorem que ens dira GitHub que tenim errors:
 
-![error GitHub Action]('./docs/img/error_linter_1.png')
+![error GitHub Action]('/docs/img/error_linter_1.png')
 
 Per tant, procedirem a corregir els errors que ens indica el log. Comencem per el primer error a la ruta **./pages/api/users/[id].js**:
 
-![correcció arxiu id.js]('./docs/img/error_linter_2.png')
+![correcció arxiu id.js]('/docs/img/error_linter_2.png')
 
 Després passem al segon error ./pages/api/users/index.js:
 
-![correcció arxiu index.js]('./docs/img/error_linter_3.png')
+![correcció arxiu index.js]('/docs/img/error_linter_3.png')
 
 Amb estes correccions fetes, ja no tindrem cap error amb aquest job.
