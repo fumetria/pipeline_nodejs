@@ -80,8 +80,8 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: .
-          author_name: "Fu Jun Fu Lin"
-          author_email: "fulin.fujun@outlook.es"
+          author_name: ${{ secrets.GIT_NAME }}
+          author_email: ${{ secrets.GIT_EMAIL }}
           message: "Update test badge result"
           push: true
 
@@ -99,11 +99,9 @@ jobs:
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          # github-token: ${{ secrets.GH_TOKEN }} #Optional
           vercel-args: "--prod" #Optional
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
-          # working-directory: ../../
 
   notificacion_job:
     needs:
