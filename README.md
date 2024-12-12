@@ -75,14 +75,62 @@ linter_job:
 
 Al arrancar per primera vegada el nostre script de linter, vorem que ens dira GitHub que tenim errors:
 
-![error GitHub Action]('/docs/img/error_linter_1.png')
+![error GitHub Action](/docs/img/error_linter_1.png)
 
 Per tant, procedirem a corregir els errors que ens indica el log. Comencem per el primer error a la ruta **./pages/api/users/[id].js**:
 
-![correcció arxiu id.js]('/docs/img/error_linter_2.png')
+![correcció arxiu id.js](/docs/img/error_linter_2.png)
 
 Després passem al segon error ./pages/api/users/index.js:
 
-![correcció arxiu index.js]('/docs/img/error_linter_3.png')
+![correcció arxiu index.js](/docs/img/error_linter_3.png)
 
 Amb estes correccions fetes, ja no tindrem cap error amb aquest job.
+
+### Cypress job
+
+```
+
+needs: linter_job
+    runs-on: ubuntu-latest
+
+    steps:
+      #step 1
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      #step 2
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start
+          wait-on: "http://localhost:3000"
+        id: cypress
+        continue-on-error: true
+
+      - name: Save test result
+        run: echo "${{ steps.cypress.outcome }}" > result.txt
+
+      #step 3
+      - name: Create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: result.txt
+          path: .
+
+```
+
+- steps:
+  - Cypress run: Aquest job s'encarregarà d'ejecutar l'action per realitzar els test desitjats.
+    - with: Ací indiquem certes variables per a arrancar l'action.
+      - build: per a que ejecute el nostre script build.
+      - start: per a que ejecute el nostre script start.
+    - id: assignem una id a aquest step per a poder accedir posteriorment a les dades d'aquest step.
+    - continue-on-error: Per a que continue el nostre workflow encara que falle una part.
+  - Save result: accedim al resultat del Cypress run i el guardem dins del fixer result.txt
+  - Create artifact: Crea un artefact i el puja, per a posteriorment poder descarregar-lo.
+
+Amb aquesta configuració, tots els test ens donen com a bo.
+
+![Cypress test result](/docs/img/cypress_result.png)
