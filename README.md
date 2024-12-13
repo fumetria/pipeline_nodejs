@@ -81,9 +81,13 @@ Per tant, procedirem a corregir els errors que ens indica el log. Comencem per e
 
 ![correcció arxiu id.js](/docs/img/error_linter_2.png)
 
+Com ens deia el log del linter, els strings tenen que anar amb doble " i no amb una '. A la linea 18 ens diu que no pot hi haure cap var, amb la qual cosa la canviem per let.
+
 Després passem al segon error ./pages/api/users/index.js:
 
 ![correcció arxiu index.js](/docs/img/error_linter_3.png)
+
+Com ens deia el log del linter, els strings tenen que anar amb doble " i no amb una '. A la linea 11 ens diu que la clausula default ha de ser la ultima del switch, per tant, posem el default al final del switch.
 
 Amb estes correccions fetes, ja no tindrem cap error amb aquest job.
 
@@ -344,7 +348,7 @@ runs:
 
 ```
 
-Al action.yml especificarem totess les varibles que anem a introduir al nostre fitxer index.js.
+Al action.yml especificarem totes les varibles que anem a introduir al nostre fitxer index.js.
 
 ```Javascript
 
@@ -404,6 +408,8 @@ async function main() {
 Aquest codi ens mostra el funcionament del nodemailer on introduïm els resultats dels jobs anteriors al cos del email i envia el email al email que hem assignat.
 
 ![email rebut](/docs/img/email_sended.png)
+
+Com podem observar, hem rebut el email amb els resultats dels jobs.
 
 ### Metriques al perfil
 
