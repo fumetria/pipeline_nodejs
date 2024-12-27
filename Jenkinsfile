@@ -1,19 +1,20 @@
 pipeline {
   agent none
+  tools { nodejs 'Node'}
   stages {
     stage('linter') {
       agent any
       steps {
-        npm install
-        npm run lint
+        sh 'npm install'
+        sh 'npm run lint'
       }
     }
     stage('test') {
       agent any
       steps {
-        npm run build
-        npm run start
-        npm run cypress
+        sh 'npm run build'
+        sh 'npm run start'
+        sh 'npm run cypress'
       }
     }
   }
