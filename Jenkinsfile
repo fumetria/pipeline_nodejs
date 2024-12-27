@@ -15,7 +15,7 @@ pipeline {
         sh 'npm run build'
         sh 'npm run cypress'
       }
-    stage('build) {
+    stage('build') {
       agent any
       steps{
         sh 'npm run start'
