@@ -13,8 +13,12 @@ pipeline {
       agent any
       steps {
         sh 'npm run build'
-        sh 'npm run start'
         sh 'npm run cypress'
+      }
+    stage('build) {
+      agent any
+      steps{
+        sh 'npm run start'
       }
     }
   }
