@@ -1,24 +1,13 @@
 pipeline {
-  agent none
+  agent any
   tools { nodejs 'Node'}
   stages {
-    stage('linter') {
-      agent any
-      steps {
-        sh 'npm install'
-        sh 'npm run lint'
+    stage('execution') {
+      parameters{
+        string(name:'persona_a_saludar', defaultValue: 'user', description: 'Nombre persona a saludar' )
       }
-    }
-    stage('test') {
-      agent any
       steps {
-        sh 'npm run build'
-      }
-    }
-    stage('build') {
-      agent any
-      steps{
-        sh 'npm run start'
+        sh "node index.js '${params.persona_a_saludar}";
       }
     }
   }
