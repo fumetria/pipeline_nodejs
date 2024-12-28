@@ -1,3 +1,3 @@
-const persona = process.argv[0];
+const persona = process.argv[2];
 
 console.log(`Hola amig@ ${persona}`);
