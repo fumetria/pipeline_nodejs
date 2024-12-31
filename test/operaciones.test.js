@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import { sum } from "./operaciones.js";
+const operacion = require("./operaciones.js");
 
 // eslint-disable-next-line no-undef
 test("pruebas de sumas", () => {
-    expect(sum(3, 6)).toBe(10);
-    expect(sum(5, 6)).toBe(12);
+    expect(operacion.sum(3, 6)).toBe(10);
+    expect(operacion.sum(5, 6)).toBe(12);
 });

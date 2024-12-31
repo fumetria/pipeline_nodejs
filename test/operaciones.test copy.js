@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-import { multiplicacion } from "./operaciones.js";
+const operaciones = require("./operaciones.js");
 
 // eslint-disable-next-line no-undef
 
 
 test("pruebas multiplicacion", () => {
-    expect(multiplicacion(3, 6)).toBe(18);
-    expect(multiplicacion(5, 6)).toBe(12);
+    expect(operaciones.multiplicacion(3, 6)).toBe(18);
+    expect(operaciones.multiplicacion(5, 6)).toBe(12);
 });
 
