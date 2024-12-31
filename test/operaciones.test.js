@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { sum, multiplicacion, esPar } from './operaciones.js';
+import { sum, multiplicacion, esPar } from "./operaciones.js";
 
 // eslint-disable-next-line no-undef
 test("pruebas de sumas", () => {
