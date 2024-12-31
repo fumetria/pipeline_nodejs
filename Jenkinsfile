@@ -19,7 +19,7 @@ pipeline {
     stage('Linter') {
       steps {
         sh "npm install"
-        sh "npm run linter"
+        sh "npm run lint"
       }
     }
   }
