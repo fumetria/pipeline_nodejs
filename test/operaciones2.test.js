@@ -5,5 +5,5 @@ const operaciones = require("./operaciones.js");
 
 test("es par?", () => {
     expect(operaciones.esPar(6)).toBe(true);
-    expect(esPar(5)).toBe(false);
+    expect(operaciones.esPar(5)).toBe(false);
 });

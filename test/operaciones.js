@@ -1,3 +1,11 @@
-export const sum = (a, b) => a + b;
-export const multiplicacion = (a, b) => a * b;
-export const esPar = (num) => num % 2 === 0;
+function sum(a, b) {
+    return (a + b);
+}
+function multiplicacion(a, b) {
+    return a * b;
+}
+function esPar(num) {
+    return num % 2 === 0;
+}
+
+module.exports = { sum, multiplicacion, esPar };
