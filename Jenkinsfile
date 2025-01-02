@@ -62,6 +62,13 @@ pipeline {
         }
       }
     }
+    stage('Push_Changes'){
+      steps{
+        sh "git add ."
+        sh "git commit -m 'Pipeline executada per ${params.EXECUTOR}. Motiu: ${params.MOTIU}"
+        sh "git push"
+      }
+    }
   }
 }
 
