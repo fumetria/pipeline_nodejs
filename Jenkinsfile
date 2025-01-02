@@ -1,7 +1,7 @@
 pipeline {
   agent any
   tools { nodejs 'Node'}
-  environment {
+  enviroment {
     EXECUTOR = ""
     MOTIU = ""
     CHAT_ID = ""
@@ -78,6 +78,7 @@ pipeline {
           sh "git config user.name Fu Jun"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
+          sh "git checkout ci_jenkins"
           sh "git push"
         }
       }
