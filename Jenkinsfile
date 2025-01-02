@@ -21,11 +21,13 @@ pipeline {
         sh "npm install"
         sh "npm run lint"
         script {
-          def linter_status = sh (
-            returnStdout: true, script: 'pwd'
-          ).trim()
-
-          echo "El resultado del linter_stage es: ${linter_status}."
+          env.linter_status = sh (returnStatus: true)
+          if(env.linter_status === 0){
+            env.LINTER_RESULT = 'SUCCESS'
+          } else {
+            env.LINTER_RESULT = 'FAIL'
+          }
+          echo "El resultado del linter_stage es: ${env.LINTER_RESULT}."
 
         }
       }
