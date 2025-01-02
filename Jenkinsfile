@@ -65,8 +65,6 @@ pipeline {
     stage('Push_Changes'){
       steps{
         script{
-          sh "git config user.email fulin789@gmail.com"
-          sh "git config user.name Fu Jun"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
           sh "git push origin ci_jenkins"
