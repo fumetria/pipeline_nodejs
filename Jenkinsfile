@@ -1,7 +1,7 @@
 pipeline {
   agent any
   tools { nodejs 'Node'}
-  enviroment {
+  environment {
     EXECUTOR = ""
     MOTIU = ""
     CHAT_ID = ""
