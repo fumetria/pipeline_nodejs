@@ -27,6 +27,7 @@ pipeline {
           } else {
             env.LINTER_RESULT = 'FAILURE'
           }
+          echo "Linter_status: ${env.linter_status}"
           echo "El resultado del linter_stage es: ${env.LINTER_RESULT}."
 
         }
