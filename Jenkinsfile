@@ -22,7 +22,7 @@ pipeline {
         sh "npm run lint"
         script {
           def linter_status = sh (
-            returnStdout: true
+            returnStdout: true, script: 'pwd'
           ).trim()
 
           echo "El resultado del linter_stage es: ${linter_status}."
