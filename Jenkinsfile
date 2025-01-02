@@ -13,8 +13,10 @@ pipeline {
           }
       }
       steps {
-        env.EXECUTOR = params.EXECUTOR
-        env.MOTIU = params.MOTIU
+        script{
+          env.EXECUTOR = params.EXECUTOR
+          env.MOTIU = params.MOTIU
+        }
         echo "Benvingut ${EXECUTOR}."
       }
     }
@@ -66,11 +68,13 @@ pipeline {
     }
     stage('Push_Changes'){
       steps{
-        sh "git config user.email fulin789@gmail.com"
-        sh "git config user.name Fu Jun"
-        sh "git add ."
-        sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
-        sh "git push"
+        script{
+          sh "git config user.email fulin789@gmail.com"
+          sh "git config user.name Fu Jun"
+          sh "git add ."
+          sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
+          sh "git push"
+        }
       }
     }
   }
