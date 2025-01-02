@@ -73,7 +73,7 @@ pipeline {
           sh "git config user.name Fu Jun"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
-          sh "git push"
+          sh "git push -u origin ci_jenkins"
         }
       }
     }
