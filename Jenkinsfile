@@ -20,6 +20,14 @@ pipeline {
       steps {
         sh "npm install"
         sh "npm run lint"
+        script {
+          def linter_status = sh (
+            returnStdout: true
+          ).trim()
+
+          echo "El resultado del linter_stage es: ${linter_status}."
+
+        }
       }
     }
     stage('Test'){
