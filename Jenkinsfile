@@ -22,7 +22,7 @@ pipeline {
         sh "npm run lint"
         script {
           env.linter_status = sh(returnStatus: true)
-          if (env.linter_status === 0){
+          if (env.linter_status == 0){
             env.LINTER_RESULT = 'SUCCESS'
           } else {
             env.LINTER_RESULT = 'FAILURE'
