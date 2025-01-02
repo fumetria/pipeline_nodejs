@@ -22,10 +22,10 @@ pipeline {
         
         script {
           env.linter_status = sh(script: "npm run lint", returnStatus: true)
-          if (env.linter_status == 0){
-            env.LINTER_RESULT = 'SUCCESS'
-          } else {
+          if (env.linter_status != '0'){
             env.LINTER_RESULT = 'FAILURE'
+          } else {
+            env.LINTER_RESULT = 'SUCCES'
           }
           echo "Linter_status: ${env.linter_status}"
           echo "El resultado del linter_stage es: ${env.LINTER_RESULT}."
