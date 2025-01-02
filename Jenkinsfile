@@ -74,6 +74,7 @@ pipeline {
           sh "git checkout ci_jenkins"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
+          sh "git push"
         }
       }
     }
