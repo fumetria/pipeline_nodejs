@@ -19,9 +19,9 @@ pipeline {
     stage('Linter') {
       steps {
         sh "npm install"
-        sh "npm run lint"
+        
         script {
-          env.linter_status = sh(returnStatus: true)
+          env.linter_status = sh("npm run lint", returnStatus: true)
           if (env.linter_status == 0){
             env.LINTER_RESULT = 'SUCCESS'
           } else {
