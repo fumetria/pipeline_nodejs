@@ -1,21 +1,27 @@
 pipeline {
   agent any
   tools { nodejs 'Node'}
+  enviroment {
+    EXECUTOR = ""
+    MOTIU = ""
+    CHAT_ID = ""
+  }
   stages {
     stage('Petició de dades') {
       input {
           message "Introdueix les següents dades: "
           ok "Enviar"
           parameters {
-              string(name: 'EXECUTOR', defaultValue: 'usuari', description: 'nom de la persona que executa la pipeline')
-              string(name: 'MOTIU', defaultValue: 'perque sí', description: 'motiu pel qual estem executant la pipeline')
-              string(name: 'CHAT_ID', defaultValue: '000', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
+              string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
+              string(name: 'motiu', defaultValue: 'Ejecutant pipeline de Jenkins', description: 'Motiu pel qual estem executant la pipeline')
+              string(name: 'chat_id', defaultValue: '000', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
           }
       }
       steps {
         script{
-          env.EXECUTOR = params.EXECUTOR
-          env.MOTIU = params.MOTIU
+          EXECUTOR = params.executor
+          MOTIU = params.motiu
+          CHAT_ID = params.chat_id
         }
         echo "Benvingut ${EXECUTOR}."
       }
@@ -23,7 +29,6 @@ pipeline {
     stage('Linter') {
       steps {
         sh "npm install"
-        
         script {
           env.linter_status = sh(script: "npm run lint", returnStatus: true)
           if (env.linter_status != '0'){
@@ -71,7 +76,6 @@ pipeline {
         script{
           sh "git config user.email fulin789@gmail.com"
           sh "git config user.name Fu Jun"
-          sh "git checkout ci_jenkins"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
           sh "git push"

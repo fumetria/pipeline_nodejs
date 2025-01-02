@@ -15,9 +15,9 @@ export default function Home() {
           Get started by editing <code>pages/index.js</code>
         </p>
         <Img
-          src="/5Bb.gif"
+          src="/Jenkins.png"
           alt="It's happening"
-          width={100}
+          width={300}
           height={100}
         />
 
