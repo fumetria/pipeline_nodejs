@@ -71,9 +71,9 @@ pipeline {
         script{
           sh "git config user.email fulin789@gmail.com"
           sh "git config user.name Fu Jun"
+          sh "git checkout ci_jenkins"
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${env.EXECUTOR}. Motiu: ${env.MOTIU}'"
-          sh "git push -u origin ci_jenkins"
         }
       }
     }
