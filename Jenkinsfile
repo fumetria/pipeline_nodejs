@@ -25,7 +25,7 @@ pipeline {
           if (env.linter_status != '0'){
             env.LINTER_RESULT = 'FAILURE'
           } else {
-            env.LINTER_RESULT = 'SUCCES'
+            env.LINTER_RESULT = 'SUCCESS'
           }
           echo "Linter_status: ${env.linter_status}"
           echo "El resultado del linter_stage es: ${env.LINTER_RESULT}."
@@ -35,7 +35,32 @@ pipeline {
     }
     stage('Test'){
       steps {
-        sh "npm test"
+        script {
+          env.test_status = sh(script: "npm test", returnStatus: true)
+          if (env.test_status != '0'){
+            env.TEST_RESULT = 'FAILURE'
+          } else {
+            env.TEST_RESULT = 'SUCCESS'
+          }
+        }
+      }
+    }
+    stage('Build'){
+      steps {
+        sh "npm run build"
+      }
+    }
+    stage('Update_Readme'){
+      steps {
+        script {
+          env.update_readme_status = sh(script: "node './jenkinsScripts/index.js' ${env.TEST_RESULT}", returnStatus: true)
+          if (env.update_readme_status != '0'){
+            env.UPDATE_README_RESULT = 'FAILURE'
+          } else {
+            env.UPDATE_README_RESULT = 'SUCCESS'
+          }
+        }
+        }
       }
     }
   }
