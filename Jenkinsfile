@@ -67,7 +67,7 @@ pipeline {
         script{
           sh "git add ."
           sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-          sh "git push origin HEAD:main"
+          sh "git push"
 
         }
       }
