@@ -2,7 +2,9 @@ pipeline {
   agent any
   tools { nodejs 'Node'}
   environment {
-    
+    EXECUTOR = ""
+    MOTIU = ""
+    CHAT_ID = ""
   }
   parameters {
     string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
