@@ -60,8 +60,8 @@ pipeline {
             env.UPDATE_README_RESULT = 'SUCCESS'
           }
         }
-        }
       }
     }
   }
 }
+
