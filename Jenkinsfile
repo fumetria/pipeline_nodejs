@@ -66,7 +66,7 @@ pipeline {
       steps{
         sh "git add ."
         sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-        sh "git push origin HEAD:ci_jenkins"
+        sh "git push origin ci_jenkins"
       }
     }
   }
