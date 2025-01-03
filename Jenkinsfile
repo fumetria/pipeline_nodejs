@@ -78,12 +78,12 @@ pipeline {
         script {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           withCredentials([usernamePassword(credentialsId: '7e1fdf2d-56bc-433b-859f-1047570ec6de', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-            def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
-            sh "git config --global user.name ${GIT_USERNAME}"
-            sh "git config --global user.password ${GIT_PASSWORD}"
-            sh "git add ."
-            sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-            sh "git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/pipeline_nodejs.git HEAD:ci_jenkins"
+            env.push_changes_status = sh ("./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
+            if (env.test_status != '0'){
+              PUSH_CHANGES_RESULT = 'FAILURE'
+            } else {
+              PUSH_CHANGES_RESULT = 'SUCCESS'
+            }
           }
         }
       }
