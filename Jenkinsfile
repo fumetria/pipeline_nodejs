@@ -64,9 +64,13 @@ pipeline {
     }
     stage('Push_Changes'){
       steps{
-        sh "git add ."
-        sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-        sh "git push origin ci_jenkins"
+        withCredentials([usernamePassword(credentialsId: '7e1fdf2d-56bc-433b-859f-1047570ec6de', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
+            sh "git config --global user.name ${GIT_USERNAME}"
+            sh "git config --global user.password ${GIT_PASSWORD}"
+            sh "git add ."
+            sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
+            sh "git push --set-upstream origin ci_jenkins"
+        }
       }
     }
   }
