@@ -83,7 +83,7 @@ pipeline {
             sh "git config --global user.password ${GIT_PASSWORD}"
             sh "git add ."
             sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-            sh "git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/pipeline_nodejs.git"
+            sh "git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/pipeline_nodejs.git HEAD:ci_jenkins"
           }
         }
       }
