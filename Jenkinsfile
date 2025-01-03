@@ -78,6 +78,7 @@ pipeline {
         script {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           withCredentials([usernamePassword(credentialsId: '7e1fdf2d-56bc-433b-859f-1047570ec6de', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+            sh "chmod +x ./jenkinsScripts/push_changes.sh"
             env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
             if (env.test_status != '0'){
               PUSH_CHANGES_RESULT = 'FAILURE'
