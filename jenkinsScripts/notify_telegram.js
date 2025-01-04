@@ -1,4 +1,4 @@
-const TelegramBot = require('node-telegram-bot-api');
+const TelegramBot = require("node-telegram-bot-api");
 const chatID = process.argv[2];
 const botToken = process.argv[3];
 const bot = new TelegramBot(botToken, { polling: true });
@@ -11,7 +11,7 @@ S'ha executat la pipeline de jenkins amb els següents resultats:
 `;
 bot.sendMessage(chatID, message)
     .then(data => {
-        console.log('Telegram sended');
-        process.exit(0)
+        console.log("Telegram sended");
+        process.exit(0);
     })
     .catch(e => process.exit(1));
