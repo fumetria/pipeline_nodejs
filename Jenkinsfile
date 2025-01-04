@@ -90,7 +90,7 @@ pipeline {
       steps{
         sh "npm i vercel"
         script{
-          if(LINTER_RESULT === "SUCCESS" && TEST_RESULT === "SUCCESS" && UPDATE_README_RESULT === "SUCCESS" && PUSH_CHANGES_RESULT === "SUCCESS"){
+          if(LINTER_RESULT == "SUCCESS" && TEST_RESULT == "SUCCESS" && UPDATE_README_RESULT == "SUCCESS" && PUSH_CHANGES_RESULT == "SUCCESS"){
             sh "vercel --token ${VERCEL_TOKEN}"
             sh "vercel --prod"
           }
