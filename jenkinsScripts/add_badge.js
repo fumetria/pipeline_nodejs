@@ -8,9 +8,9 @@ async function main() {
         const imgSuccess = "https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg";
         const badge = test_result === "SUCCESS" ? imgSuccess : imgFail;
         const textBadge = `RESULTAT DELS ÚLTIMS TESTS \n ![Test result badge](${badge}) \n`;
-        //const docsText = await fs.readFile("./docs/activitat_gh_actions.md", 'utf8');
+        const docsText = await fs.readFile("./docs/activitat_jenkins.md", 'utf8');
         await fs.writeFile("./README.md", textBadge);
-        //await fs.appendFile('./README.md', docsText);
+        await fs.appendFile('./README.md', docsText);
         process.exit(0);
     } catch (error) {
         return error;

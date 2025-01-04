@@ -59,7 +59,7 @@ pipeline {
     stage('Update_Readme'){
       steps {
         script {
-          env.update_readme_status = sh(script: "node './jenkinsScripts/index.js' ${TEST_RESULT}", returnStatus: true)
+          env.update_readme_status = sh(script: "node './jenkinsScripts/add_badge.js' ${TEST_RESULT}", returnStatus: true)
           if (env.update_readme_status != '0'){
             UPDATE_README_RESULT = 'FAILURE'
           } else {
