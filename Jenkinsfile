@@ -10,11 +10,12 @@ pipeline {
     UPDATE_README_RESULT = ""
     PUSH_CHANGES_RESULT = ""
     VERCEL_TOKEN = credentials('vercel_token')
+    BOT_TOKEN = credentials('bot_token')
   }
   parameters {
     string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
     string(name: 'motiu', defaultValue: 'Ejecutant pipeline de Jenkins', description: 'Motiu pel qual estem executant la pipeline')
-    string(name: 'chat_id', defaultValue: '000', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
+    string(name: 'chat_id', defaultValue: '172897049', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
   }
   stages {
     stage('Petició de dades') {
@@ -91,7 +92,7 @@ pipeline {
         script{
           if(LINTER_RESULT == "SUCCESS" && TEST_RESULT == "SUCCESS" && UPDATE_README_RESULT == "SUCCESS" && PUSH_CHANGES_RESULT == "SUCCESS"){
             sh "npm i -g vercel"
-            sh "vercel --yes --token ${VERCEL_TOKEN}"
+            sh "vercel --yes --token ${VERCEL_TOKEN} --name pipeline-nodejs"
             sh "vercel --prod"
           }
         }
@@ -99,7 +100,7 @@ pipeline {
     }
     stage('Notification'){
       steps{
-        echo "Enviem missatge a Telegram"
+        sh "node ./jenkinsScripts/notify_telegram.js ${params.chat_id} ${BOT_TOKEN} ${LINTER_RESULT} ${TEST_RESULT} ${UPDATE_README_RESULT} ${PUSH_CHANGES_RESULT}"
       }
     }
   }
