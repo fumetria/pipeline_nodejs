@@ -91,8 +91,7 @@ pipeline {
         script{
           if(LINTER_RESULT == "SUCCESS" && TEST_RESULT == "SUCCESS" && UPDATE_README_RESULT == "SUCCESS" && PUSH_CHANGES_RESULT == "SUCCESS"){
             sh "npm i -g vercel"
-            sh "vercel --token ${VERCEL_TOKEN}"
-            sh "vercel --yes"
+            sh "vercel --yes --token ${VERCEL_TOKEN}"
             sh "vercel --prod"
           }
         }
