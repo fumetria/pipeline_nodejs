@@ -9,6 +9,7 @@ pipeline {
     TEST_RESULT = ""
     UPDATE_README_RESULT = ""
     PUSH_CHANGES_RESULT = ""
+    VERCEL_TOKEN = credentials('vercel_token')
   }
   parameters {
     string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
@@ -68,16 +69,10 @@ pipeline {
     }
     stage('Push_Changes'){
       steps{
-        // withCredentials([usernamePassword(credentialsId: '7e1fdf2d-56bc-433b-859f-1047570ec6de', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
-        //   sh "git config --global user.name ${GIT_USERNAME}"
-        //   sh "git config --global user.password ${GIT_PASSWORD}"
-        //   sh "git add ."
-        //   sh "git commit -m 'Pipeline executada per ${params.executor}. Motiu: ${params.motiu}'"
-        //   sh "git push --set-upstream origin ci_jenkins"
-        // }
         script {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           withCredentials([usernamePassword(credentialsId: '7e1fdf2d-56bc-433b-859f-1047570ec6de', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+            //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
             sh "chmod +x ./jenkinsScripts/push_changes.sh"
             env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
             if (env.test_status != '0'){
@@ -86,8 +81,20 @@ pipeline {
               PUSH_CHANGES_RESULT = 'SUCCESS'
             }
           }
+          echo "Push_changes Result: ${PUSH_CHANGES_RESULT}"
+          }
         }
       }
+    }
+    stage('Deploy to Vercel'){
+      steps{
+        sh "npm i vercel"
+        script{
+          if(LINTER_RESULT === "SUCCESS" && TEST_RESULT === "SUCCESS" && UPDATE_README_RESULT === "SUCCESS" && PUSH_CHANGES_RESULT === "SUCCESS"){
+            sh "vercel --token ${VERCEL_TOKEN}"
+            sh "vercel --prod"
+          }
+        }
       }
     }
   }
