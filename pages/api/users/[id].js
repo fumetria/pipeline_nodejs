@@ -5,7 +5,7 @@ export default handler;
 function handler(req, res) {
   switch (req.method) {
     //7:10  Error: Strings must use doublequote.  quotes
-    case "GET":
+    case 'GET':
       return getUserById();
     //9:10  Error: Strings must use doublequote.  quotes
     case "PUT":
