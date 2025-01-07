@@ -69,9 +69,9 @@ pipeline {
       steps{
         script {
            // withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-              //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
+              //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO. ${GIT_USERNAME} ${GIT_PASSWORD}
               sh "chmod +x ./jenkinsScripts/push_changes.sh"
-              env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
+              env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh  ${params.executor} ${params.motiu}", returnStatus: true)
               if (env.test_status != '0'){
                 PUSH_CHANGES_RESULT = 'FAILURE'
               } else {
