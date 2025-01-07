@@ -68,8 +68,7 @@ pipeline {
     stage('Push_Changes'){
       steps{
         script {
-          //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-            withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+           // withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
               sh "chmod +x ./jenkinsScripts/push_changes.sh"
               env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
@@ -78,8 +77,7 @@ pipeline {
               } else {
                 PUSH_CHANGES_RESULT = 'SUCCESS'
               }
-            }
-          //}
+           // }
         }
       }
     }
