@@ -33,9 +33,6 @@ pipeline {
           } else {
             LINTER_RESULT = 'SUCCESS'
           }
-          echo "Linter_status: ${env.linter_status}"
-          echo "El resultado del linter_stage es: ${LINTER_RESULT}."
-
         }
       }
     }
