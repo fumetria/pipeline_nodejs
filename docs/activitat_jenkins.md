@@ -255,7 +255,7 @@ stage('Push_Changes'){
 ```
 
 - script->withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]): Injectem les credencials de github al stage. D'aquesta forma evitem que ens aparega el següent error:
-
+  ![Error autenticació](/docs/img/Error_git_push.png)
 - sh "chmod +x ./jenkinsScri...: Modifiquem permisos del nostre script per a evitar problemes d'accés.
 - steps->script: Ejecutarà el comando _node './jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}'_ per a que ejecute el nostre script.
   - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat del script.
@@ -297,6 +297,8 @@ Utilitzant els paràmetres que hem afegit al comando, injectem el nostre usuari 
 - sh "npm i -g vercel": Instal·lem dependéncies de Vercel
 - sh "vercel --yes --token ${VERCEL*TOKEN} --name pipeline-nodejs": Despleguem el repositori al projecte que hem creat anteriorment en Vercel \_pipeline-nodejs* amb el token de Vercel que hem creat anteriorment a Vercel.
 
+![Despliegue Vercel](/docs/img/Vercel.png)
+
 ### Notify
 
 ```Groovy
@@ -307,6 +309,14 @@ Utilitzant els paràmetres que hem afegit al comando, injectem el nostre usuari 
       }
     }
 ```
+
+- steps{sh "node...}: Ejecutem el nostre script per a enviar una notificació desde el bot de Telegram que hem creat anteriorment amb el bot-gestor de BotFather. Afegim les següents variables:
+  - params.chat_id: ChatID on eviem els missatges del nostre bot.
+  - BOT_TOKEN: Token d'accés al nostre bot.
+  - LINTER_RESULT: Resultat del linter stage.
+  - TEST_RESULT: Resultat del test stage.
+  - UPDATE_README_RESULT: Resultat del update readme stage.
+  - PUSH_CHANGES_RESULT: Resultat del push changes stage.
 
 _notify_telegram.js_
 
@@ -333,3 +343,5 @@ bot.sendMessage(chatID, message)
 ```
 
 ![Missatge bot Telegram](/docs/img/Resultat_pipeline_Telegram.png)
+
+Com podem observar, hem rebut la notificació del bot amb els resultats dels stages.
