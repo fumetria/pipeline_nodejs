@@ -1,4 +1,5 @@
-RESULTAT DELS ÚLTIMS TESTS AMB JEST:  ![Test result badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)# Pràctica Jenkins
+RESULTAT DELS ÚLTIMS TESTS AMB JEST:  ![Test result badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg) 
+# Pràctica Jenkins
 
 En aquesta pràctica aplicarem una sèrie de millores sobre un projecte creat amb next.js.
 
@@ -107,4 +108,67 @@ stage('Linter') {
 - steps->sh "npm install": Instal·larà les dependencies del nostre projecte node.
 - steps->script: Ejecutarà el comando npm run lint per a que ejecute el Linter per a que busque possibles errors.
   - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat del Linter.
-  - if env.linter_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre Linter.
+  - if env.linter_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre Linter a la variable LINTER_RESULT.
+
+Al ejecutar per primera vegada el linter, vorem que ens dona error:
+
+![Linter error in pipeline](/docs/img/Lint_error.png)
+![Linter error file](/docs/img/Linter_errors.png)
+
+Com podem observar, l'arxiu _[id].js_ a la ruta _./pages/api/users/_ ens dona error. Procedim a corregir-lo:
+![Fix linter errors](/docs/img/Linter_errors_fix.png)
+El Linter te la regla de doble cometes, per tant, procedim a canviar les cometes simples per dobles.
+
+### Test stage
+
+```Groovy
+
+stage('Test'){
+      steps {
+        script {
+          env.test_status = sh(script: "npm test", returnStatus: true)
+          if (env.test_status != '0'){
+            TEST_RESULT = 'FAILURE'
+          } else {
+            TEST_RESULT = 'SUCCESS'
+          }
+        }
+      }
+    }
+
+```
+
+- steps->script: Ejecutarà el comando npm test per a que ejecute els tests fets amb Jest.
+  - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat dels tests.
+  - if env.test_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre test a la variable TEST_RESULT.
+
+### Build stage
+
+```Groovy
+
+stage('Build'){
+      steps {
+        sh "npm run build"
+      }
+    }
+
+```
+
+- steps->sh: Farem un npm run build per a que ens empaquete tot el repositori per a poder després publicar-lo a Vercel.
+
+### Update readme
+
+```Groovy
+stage('Update_Readme'){
+      steps {
+        script {
+          env.update_readme_status = sh(script: "node './jenkinsScripts/add_badge.js' ${TEST_RESULT}", returnStatus: true)
+          if (env.update_readme_status != '0'){
+            UPDATE_README_RESULT = 'FAILURE'
+          } else {
+            UPDATE_README_RESULT = 'SUCCESS'
+          }
+        }
+      }
+    }
+```
