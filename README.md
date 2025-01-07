@@ -16,7 +16,7 @@ Jenkins fa servir l'arquitectura mestre/esclau:
 
 ## Què farem en aquesta pràctica?
 
-La pràctica consistirà en fer diversos stages dins d'un Jenkinsfile. Aquestos seran:
+La pràctica consistirà en crear un pipeline que durà a terme diversos stages dins d'un Jenkinsfile. Aquestos seran:
 
 - Instal·lar plugin Build Monitor i configurar-lo per a que ens mostre una vista amb totes les tasques ejecutades amb Jenkins.
 - Petició de dades stage: En aquest stage demanarem tres valors per pantalla.
@@ -30,7 +30,40 @@ La pràctica consistirà en fer diversos stages dins d'un Jenkinsfile. Aquestos 
 
 ## Resolució
 
-Comencem creant el nostre Jenkinsfile:
+Comencem creant el nostre Pipeline, fem click en Nueva Tarea i anem omplint els camps necessaris que ens demanen.
+
+![Clic en Nueva Tarea](/docs/img/Nueva_tarea.png)
+
+Posem un titol al pipeline i sel·leccionem pipeline
+
+![Pantalla creació tarea nova](/docs/img/Nueva_tarea_2.png)
+
+Una vegada creat el pipeline, anem a configurar-lo. Procedim a anar al apartat Pipeline i afegim els següents valors:
+
+- Definition: Pipeline script from SCM
+- SCM: Git
+- Repository URL: Url al nostre repositori
+- Credentials: Les credencials que hem afegit anteriorment en la configuració de Jenkins amb les dades d'accés a GitHub
+- Branch Specifier: \*/ci_jenkins (El demanat per l'enunciat)
+- Script Path: Jenkinsfile (nom del nostre arxiu de pipeline)
+
+![Nova tarea 1](/docs/img/Nueva_tarea_3.png)
+![Nova tarea 2](/docs/img/Nueva_tarea_4.png)
+
+Una vegada creat el Pipeline, procedim a crear una vista amb el plugin Build Monitor.
+
+### Vista Build Monitor
+
+Per a mostrar la vista de Build Monitor, primer anem a instal·lar el plugin de Build Monitor desde el gestor de plugins:
+![Build monitor view plugin](/docs/img/Build_package.png)
+
+Una vegada instal·lat, procedim a configurar-lo creant una nova vista:
+![Configuració Build monitor view](/docs/img/Nueva_vista.png)
+![Creació vista](/docs/img/Nueva_vista_2.png)
+
+### Creació del Jenkinsfile
+
+Ara anem a crear el nostre Jenkinsfile que posteriorment putjarem a GitHub per a després ejecutar desde Jenkins.
 
 ```Groovy
 
@@ -62,15 +95,6 @@ pipeline {
 - enviroment: Ací crearem totes les nostres variables que anem a utilitzar en tot el pipeline.
 - parameters: Són els paràmeters que defeneixen els inputs que anem a utilitzar.
 - stages: Ací possarem tots els stages que anem a realitzar.
-
-### Vista Build Monitor
-
-Per a mostrar la vista de Build Monitor, primer anem a instal·lar el plugin de Build Monitor desde el gestor de plugins:
-![Build monitor view plugin](/docs/img/Build_package.png)
-
-Una vegada instal·lat, procedim a configurar-lo creant una nova vista:
-![Configuració Build monitor view](/docs/img/Nueva_vista.png)
-![Creació vista](/docs/img/Nueva_vista_2.png)
 
 ### Dades introduïdes
 
@@ -215,16 +239,14 @@ En aquest codi, utilitzarem la dependència de proccess per a agafar l'argument 
 stage('Push_Changes'){
     steps{
         script {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
-                    sh "chmod +x ./jenkinsScripts/push_changes.sh"
-                    env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
-                    if (env.test_status != '0'){
-                        PUSH_CHANGES_RESULT = 'FAILURE'
-                    } else {
-                        PUSH_CHANGES_RESULT = 'SUCCESS'
-                    }
+            withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
+                sh "chmod +x ./jenkinsScripts/push_changes.sh"
+                env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
+                if (env.test_status != '0'){
+                    PUSH_CHANGES_RESULT = 'FAILURE'
+                } else {
+                    PUSH_CHANGES_RESULT = 'SUCCESS'
                 }
             }
         }
@@ -233,4 +255,94 @@ stage('Push_Changes'){
 
 ```
 
-- catch
+- script->withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]): Injectem les credencials de github al stage. D'aquesta forma evitem que ens aparega el següent error:
+  ![Error autenticació](/docs/img/Error_git_push.png)
+- sh "chmod +x ./jenkinsScri...: Modifiquem permisos del nostre script per a evitar problemes d'accés.
+- steps->script: Ejecutarà el comando _node './jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}'_ per a que ejecute el nostre script.
+  - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat del script.
+  - if env.push_changes_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre script a la variable PUSH_CHANGES_RESULT.
+
+_push_changes.sh_
+
+```Shell
+
+#!/bin/bash
+
+git config --global user.name $1
+git config --global user.password $2
+git add .
+git commit -m "Pipeline executada per '$3'. Motiu: '$4'"
+git push https://$1:$2@github.com/$1/pipeline_nodejs.git HEAD:ci_jenkins
+
+```
+
+Utilitzant els paràmetres que hem afegit al comando, injectem el nostre usuari i contraseña de GitHub i les variables EXECUTOR i MOTIU als comandos de Git.
+
+### Deploy to Vercel
+
+```Groovy
+
+    stage('Deploy to Vercel'){
+        steps{
+            script{
+                if(LINTER_RESULT == "SUCCESS" && TEST_RESULT == "SUCCESS" && UPDATE_README_RESULT == "SUCCESS" && PUSH_CHANGES_RESULT == "SUCCESS"){
+                sh "npm i -g vercel"
+                sh "vercel --yes --token ${VERCEL_TOKEN} --name pipeline-nodejs"
+                }
+            }
+        }
+    }
+```
+
+- steps->script{if...}: Soles ejecutarà el nostre script per a desplegar en Vercel si les variables de _X_RESULT_ són igual a SUCCESS
+- sh "npm i -g vercel": Instal·lem dependéncies de Vercel
+- sh "vercel --yes --token ${VERCEL*TOKEN} --name pipeline-nodejs": Despleguem el repositori al projecte que hem creat anteriorment en Vercel \_pipeline-nodejs* amb el token de Vercel que hem creat anteriorment a Vercel.
+
+![Despliegue Vercel](/docs/img/Vercel.png)
+
+### Notify
+
+```Groovy
+
+    stage('Notification'){
+      steps{
+        sh "node ./jenkinsScripts/notify_telegram.js ${params.chat_id} ${BOT_TOKEN} ${LINTER_RESULT} ${TEST_RESULT} ${UPDATE_README_RESULT} ${PUSH_CHANGES_RESULT}"
+      }
+    }
+```
+
+- steps{sh "node...}: Ejecutem el nostre script per a enviar una notificació desde el bot de Telegram que hem creat anteriorment amb el bot-gestor de BotFather. Afegim les següents variables:
+  - params.chat_id: ChatID on eviem els missatges del nostre bot.
+  - BOT_TOKEN: Token d'accés al nostre bot.
+  - LINTER_RESULT: Resultat del linter stage.
+  - TEST_RESULT: Resultat del test stage.
+  - UPDATE_README_RESULT: Resultat del update readme stage.
+  - PUSH_CHANGES_RESULT: Resultat del push changes stage.
+
+_notify_telegram.js_
+
+```Javascript
+
+const TelegramBot = require("node-telegram-bot-api");
+const chatID = process.argv[2];
+const botToken = process.argv[3];
+const bot = new TelegramBot(botToken, { polling: true });
+const message = `
+S'ha executat la pipeline de jenkins amb els següents resultats:
+- Linter_stage: ${process.argv[4]}
+- Test_stage: ${process.argv[5]}
+- Update_readme_stage: ${process.argv[6]}
+- Deploy_to_Vercel_stage: ${process.argv[7]}
+`;
+bot.sendMessage(chatID, message)
+    .then(data => {
+        console.log("Telegram sended");
+        process.exit(0);
+    })
+    .catch(e => process.exit(1));
+
+```
+
+![Missatge bot Telegram](/docs/img/Resultat_pipeline_Telegram.png)
+
+Com podem observar, hem rebut la notificació del bot amb els resultats dels stages.
