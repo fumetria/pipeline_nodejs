@@ -28,3 +28,83 @@ La pràctica consistirà en fer diversos stages dins d'un Jenkinsfile. Aquestos 
 - Notify stage: S'encarregarà d'enviar un missatge al bot de telegram per a que ens avise del resultat de tots els stage anteriors.
 
 ## Resolució
+
+Comencem creant el nostre Jenkinsfile:
+
+```Groovy
+
+pipeline {
+  agent any
+  tools { nodejs 'Node'}
+  environment {
+    EXECUTOR = ""
+    MOTIU = ""
+    CHAT_ID = ""
+    LINTER_RESULT= ""
+    TEST_RESULT = ""
+    UPDATE_README_RESULT = ""
+    PUSH_CHANGES_RESULT = ""
+    VERCEL_TOKEN = credentials('vercel_token')
+    BOT_TOKEN = credentials('bot_token')
+  }
+  parameters {
+    string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
+    string(name: 'motiu', defaultValue: 'Ejecutant pipeline de Jenkins', description: 'Motiu pel qual estem executant la pipeline')
+    string(name: 'chat_id', defaultValue: '172897049', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
+  }
+  stages {
+```
+
+- pipeline: Es la capçalera del nostre pipeline.
+- agent: Fa referéncia a la màquina que ejecutarem el nostre entorn de Jenkins, en aquest cas any(qualsevol).
+- tools: Indiquem les ferramentes adicionals que anem a utilitzar al nostre Pipeline, en aquest cas Node.
+- enviroment: Ací crearem totes les nostres variables que anem a utilitzar en tot el pipeline.
+- parameters: Són els paràmeters que defeneixen els inputs que anem a utilitzar.
+- stages: Ací possarem tots els stages que anem a realitzar.
+
+### Vista Build Monitor
+
+Per a mostrar la vista de Build Monitor, primer anem a instal·lar el plugin de Build Monitor desde el gestor de plugins:
+![Build monitor view plugin](/docs/img/Build_package.png)
+
+Una vegada instal·lat, procedim a configurar-lo creant una nova vista:
+![Configuració Build monitor view](/docs/img/Nueva_vista.png)
+![Creació vista](/docs/img/Nueva_vista_2.png)
+
+### Dades introduïdes
+
+En aquest stages ens dirà quins són els paràmetres que ha indicat l'usuari.
+
+```Groovy
+
+    stage('Petició de dades') {
+      steps {
+        echo "Dades introduïdes son: \n EXECUTOR: ${params.executor} \n MOTIU: ${params.motiu} \n CHAT_ID: ${params.chat_id}"
+      }
+    }
+
+```
+
+### Linter stage
+
+```Groovy
+
+stage('Linter') {
+      steps {
+        sh "npm install"
+        script {
+          env.linter_status = sh(script: "npm run lint", returnStatus: true)
+          if (env.linter_status != '0'){
+            LINTER_RESULT = 'FAILURE'
+          } else {
+            LINTER_RESULT = 'SUCCESS'
+          }
+        }
+      }
+    }
+```
+
+- steps->sh "npm install": Instal·larà les dependencies del nostre projecte node.
+- steps->script: Ejecutarà el comando npm run lint per a que ejecute el Linter per a que busque possibles errors.
+  - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat del Linter.
+  - if env.linter_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre Linter.
