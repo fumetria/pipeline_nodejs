@@ -8,9 +8,9 @@ function handler(req, res) {
     case 'GET':
       return getUserById();
     //9:10  Error: Strings must use doublequote.  quotes
-    case "PUT":
+    case 'PUT':
       return updateUser();
-    case "DELETE":
+    case 'DELETE':
       return deleteUser();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
