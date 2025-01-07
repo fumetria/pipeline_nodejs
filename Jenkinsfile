@@ -15,7 +15,7 @@ pipeline {
   parameters {
     string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
     string(name: 'motiu', defaultValue: 'Ejecutant pipeline de Jenkins', description: 'Motiu pel qual estem executant la pipeline')
-    string(name: 'chat_id', defaultValue: '172897049', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
+    string(name: 'chat_id', defaultValue: '111111111', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
   }
   stages {
     stage('Petició de dades') {
@@ -68,19 +68,18 @@ pipeline {
     stage('Push_Changes'){
       steps{
         script {
-          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-            //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
-            sh "chmod +x ./jenkinsScripts/push_changes.sh"
-            env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
-            if (env.test_status != '0'){
-              PUSH_CHANGES_RESULT = 'FAILURE'
-            } else {
-              PUSH_CHANGES_RESULT = 'SUCCESS'
+          //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+              //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
+              sh "chmod +x ./jenkinsScripts/push_changes.sh"
+              env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
+              if (env.test_status != '0'){
+                PUSH_CHANGES_RESULT = 'FAILURE'
+              } else {
+                PUSH_CHANGES_RESULT = 'SUCCESS'
+              }
             }
-          }
-          echo "Push_changes Result: ${PUSH_CHANGES_RESULT}"
-          }
+          //}
         }
       }
     }

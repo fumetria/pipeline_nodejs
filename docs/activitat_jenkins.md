@@ -50,7 +50,7 @@ pipeline {
   parameters {
     string(name: 'executor', defaultValue: 'usuari', description: 'Nom de la persona que executa la pipeline')
     string(name: 'motiu', defaultValue: 'Ejecutant pipeline de Jenkins', description: 'Motiu pel qual estem executant la pipeline')
-    string(name: 'chat_id', defaultValue: '172897049', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
+    string(name: 'chat_id', defaultValue: '111111111', description: 'ChatID de telegram al qual notificarem el resultat de cada stage executat')
   }
   stages {
 ```
@@ -171,3 +171,65 @@ stage('Update_Readme'){
       }
     }
 ```
+
+Mitjançant un script de la nostra carpeta jenkinsScripts, inserirem una insignia que representa el resultat dels tests realitzats.
+
+- steps->script: Ejecutarà el comando _node './jenkinsScripts/add_badge.js ${TEST_RESULT}_ per a que ejecute el nostre script.
+  - returnStatus:true : Amb aquest paràmetre ens donarà un valor segons el resultat del script.
+  - if env.test_status!= 0 : Amb aquest condicional, assignarem el valor Failure o Success segons si ha fallat o no el nostre script a la variable UPDATE_README_RESULT.
+
+_add_badge.js_
+
+```Javascript
+
+const fs = require("node:fs/promises");
+
+async function main() {
+
+    try {
+        const test_result = process.argv[2];
+        const imgFail = "https://img.shields.io/badge/test-failure-red";
+        const imgSuccess = "https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg";
+        const badge = test_result === "SUCCESS" ? imgSuccess : imgFail;
+        const textBadge = `RESULTAT DELS ÚLTIMS TESTS AMB JEST:  ![Test result badge](${badge}) \n`;
+        const docsText = await fs.readFile("./docs/activitat_jenkins.md", "utf8");
+        await fs.writeFile("./README.md", textBadge);
+        await fs.appendFile("./README.md", docsText);
+        process.exit(0);
+    } catch (error) {
+        return error;
+    }
+}
+
+main();
+
+```
+
+En aquest codi, utilitzarem la dependència de proccess per a agafar l'argument ${TEST_RESULT} que hem afegit i la dependència de fs.promises per a manipular els arxius. Com que la funció fs.writeFile() sobreescriu l'arxiu, anem a fer un fs.appendFile() per a afegir aquesta documentació al README i no es borre cada vegada que s'ejecute aquesta action.
+
+### Push changes
+
+```Groovy
+
+stage('Push_Changes'){
+    steps{
+        script {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    //MODIFIQUEM PERMISSOS AL SCRIPT PER A PODER EJECUTARLO.
+                    sh "chmod +x ./jenkinsScripts/push_changes.sh"
+                    env.push_changes_status = sh(script: "./jenkinsScripts/push_changes.sh ${GIT_USERNAME} ${GIT_PASSWORD} ${params.executor} ${params.motiu}", returnStatus: true)
+                    if (env.test_status != '0'){
+                        PUSH_CHANGES_RESULT = 'FAILURE'
+                    } else {
+                        PUSH_CHANGES_RESULT = 'SUCCESS'
+                    }
+                }
+            }
+        }
+    }
+}
+
+```
+
+- catch
