@@ -59,6 +59,7 @@ Per a mostrar la vista de Build Monitor, primer anem a instal·lar el plugin de 
 Una vegada instal·lat, procedim a configurar-lo creant una nova vista:
 ![Configuració Build monitor view](/docs/img/Nueva_vista.png)
 ![Creació vista](/docs/img/Nueva_vista_2.png)
+![Build Monitor View](/docs/img/Build_Monitor.png)
 
 ### Creació del Jenkinsfile
 
